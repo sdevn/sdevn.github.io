@@ -127934,6 +127934,8 @@ void main() {
     // });
 
     var COLORS = ['green', 'lime', 'yellow', 'orange', 'red'];
+    var ANIMATION_TIME = 2000 * 1.5;
+    var ANIMATION_DELAY_TIME = 2000 * 2.5;
     var i = 0;
     function getData() {
       var transactions_by_key = transactions[i];
@@ -127961,12 +127963,12 @@ void main() {
       }
       GlobeGL.pointsData(gData);
       i++;
-      if (i >= transactions.length) {
+      if (i >= Object.keys(transactions).length) {
         i = 0;
       }
-      setTimeout(getData, ANIMATION_TIME + 5500);
+      setTimeout(getData, ANIMATION_TIME + ANIMATION_DELAY_TIME);
     }
-    var ANIMATION_TIME = 2000 * 1.5;
+
     // NOTE Arc animations are followed after the globe enters the scene
     setTimeout(function () {
       GlobeGL.labelsData(labelData).labelColor(function () {

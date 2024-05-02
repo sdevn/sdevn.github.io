@@ -136,6 +136,9 @@ function initGlobe() {
     'red'
   ];
 
+  const ANIMATION_TIME = 2000 * 1.5;
+  const ANIMATION_DELAY_TIME = 2000 * 2.5;
+
   let i = 0;
   function getData() {
     var transactions_by_key = transactions[i];
@@ -174,14 +177,13 @@ function initGlobe() {
     GlobeGL.pointsData(gData);
 
     i++;
-    if (i >= transactions.length) {
+    if (i >= Object.keys(transactions).length) {
       i = 0;
     }
 
-    setTimeout(getData, ANIMATION_TIME + 5500);
+    setTimeout(getData, ANIMATION_TIME + ANIMATION_DELAY_TIME);
   }
 
-  const ANIMATION_TIME = 2000 * 1.5;
   // NOTE Arc animations are followed after the globe enters the scene
   setTimeout(() => {
     GlobeGL
