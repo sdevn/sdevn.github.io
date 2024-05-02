@@ -137,7 +137,7 @@ function initGlobe() {
   ];
 
   const ANIMATION_TIME = 2000 * 1.5;
-  const ANIMATION_DELAY_TIME = 2000 * 2.5;
+  const ANIMATION_DELAY_TIME = 2000 * 2.1;
 
   let i = 0;
   function getData() {

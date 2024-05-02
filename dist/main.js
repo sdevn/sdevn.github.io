@@ -127935,7 +127935,7 @@ void main() {
 
     var COLORS = ['green', 'lime', 'yellow', 'orange', 'red'];
     var ANIMATION_TIME = 2000 * 1.5;
-    var ANIMATION_DELAY_TIME = 2000 * 2.5;
+    var ANIMATION_DELAY_TIME = 2000 * 2.1;
     var i = 0;
     function getData() {
       var transactions_by_key = transactions[i];
