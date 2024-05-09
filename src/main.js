@@ -1,5 +1,4 @@
 import Globe from "./index.js";
-import { WebGLRenderer, Scene } from "three";
 import {
   PerspectiveCamera,
   AmbientLight,
@@ -11,11 +10,10 @@ import {
   // CameraHelper,
   PointLight,
   SphereGeometry,
-  Raycaster,
-  Vector2,
 } from "three";
 import countries from "./files/globe-data-min.json";
 import transactions from "./files/transactions_norm.json";
+import { or } from "three/examples/jsm/nodes/Nodes.js";
 // let transactions = [];
 let renderer, camera, scene, controls;
 let mouseX = 0;
@@ -136,17 +134,28 @@ function initGlobe() {
     'red'
   ];
 
-  const ANIMATION_TIME = 2000 * 1.5;
-  const ANIMATION_DELAY_TIME = 2000 * 2.1;
+  function fmtNumber(n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  const ANIMATION_TIME = 2000 * 0.5;
+  const ANIMATION_DELAY_TIME = 2000 * .1;
 
   let i = 0;
   function getData() {
     var transactions_by_key = transactions[i];
 
     gData = [];
+    var total_amount = 0;
+    var total_transactions = 0;
+    var top_risky_cities = [];
+    var max_top_risk = -1;
+    var order_date;
 
     for (var transaction_key in transactions_by_key) {
       var transaction = transactions_by_key[transaction_key];
+
+      order_date = transaction.order_date;
 
       if (transaction.order_total_sum < 0 * 1000) {
         // console.log(transaction);
@@ -154,6 +163,17 @@ function initGlobe() {
       }
       else {
         // console.log(transaction, transaction_key);
+      }
+
+      total_amount += transaction.order_total_sum;
+      total_transactions += transaction.order_total_count;
+
+      if (Math.floor(transaction.risk_score_mean) > max_top_risk) {
+        max_top_risk = Math.floor(transaction.risk_score_mean);
+        top_risky_cities = [transaction.city];
+      }
+      else if (Math.floor(transaction.risk_score_mean) == max_top_risk) {
+        top_risky_cities.push(transaction.city);
       }
 
       var s = transaction.order_total_sum / (160 * 1000 * 10);
@@ -176,6 +196,18 @@ function initGlobe() {
 
     GlobeGL.pointsData(gData);
 
+    // sort top_risky_cities by city name
+    top_risky_cities.sort();
+
+    // find #info div and update the content
+    var info = document.getElementById('info');
+    var info_innerHTML = `<pre>`;
+    info_innerHTML += `${order_date}\n`;
+    info_innerHTML += `Total Amount: $${fmtNumber(Math.floor(total_amount))}\n`;
+    info_innerHTML += `# of Transactions: ${total_transactions}\n`;
+    info_innerHTML += `Average amount: $${fmtNumber(Math.floor(total_amount / total_transactions))}\n`;
+    info.innerHTML = info_innerHTML;
+
     i++;
     if (i >= Object.keys(transactions).length) {
       i = 0;
@@ -184,7 +216,7 @@ function initGlobe() {
     setTimeout(getData, ANIMATION_TIME + ANIMATION_DELAY_TIME);
   }
 
-  // NOTE Arc animations are followed after the globe enters the scene
+  // NOTE animations are followed after the globe enters the scene
   setTimeout(() => {
     GlobeGL
       .labelsData(labelData)
@@ -201,8 +233,8 @@ function initGlobe() {
       .pointAltitude('size')
       .pointColor('color');
 
-    setTimeout(getData, 2000);
-  }, 1000);
+    setTimeout(getData, ANIMATION_TIME);
+  }, 500);
 
   // set handlers for next and previous buttons
   // document.getElementById('next').addEventListener('click', function () {

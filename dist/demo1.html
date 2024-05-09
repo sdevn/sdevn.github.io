@@ -1,0 +1,41 @@
+<html>
+<head>
+  <style> 
+    body { margin: 0; }
+    #container {
+      position: relative;
+    }
+    #container canvas, #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: white;
+    }
+
+    #info {
+      /* white rectangle with black border */
+      border: 2px solid white;
+      padding: 8px;
+      border-radius: 5px;
+      margin-top: 4px;
+      margin-left: 6px;
+    }
+      
+  </style>
+  <title>Fraud.net Globe</title>
+
+  <!--<script src="//unpkg.com/globe.gl"></script>-->
+</head>
+
+<body>
+  <div id="globeViz">
+  </div>
+
+  <div id="overlay">
+    <div id="info">
+    </div>
+  </div>
+
+  <script src="main_u.js"></script>
+</body>  
+</html>
