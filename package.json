@@ -16,10 +16,6 @@
   "sideEffects": [
     "./src/*.css"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vasturiano/globe.gl.git"
-  },
   "keywords": [
     "webgl",
     "three",
@@ -29,15 +25,7 @@
     "projection",
     "orthographic"
   ],
-  "author": {
-    "name": "Vasco Asturiano",
-    "url": "https://github.com/vasturiano"
-  },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vasturiano/globe.gl/issues"
-  },
-  "homepage": "https://github.com/vasturiano/globe.gl",
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "dev": "rollup -w --config rollup.config.dev.js",

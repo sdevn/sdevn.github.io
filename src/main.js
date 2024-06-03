@@ -12,8 +12,8 @@ import {
   SphereGeometry,
 } from "three";
 import countries from "./files/globe-data-min.json";
-import transactions from "./files/transactions_norm.json";
-import { or } from "three/examples/jsm/nodes/Nodes.js";
+// import transactions from "./files/transactions_norm.json";
+// import { or } from "three/examples/jsm/nodes/Nodes.js";
 // let transactions = [];
 let renderer, camera, scene, controls;
 let mouseX = 0;
@@ -115,6 +115,7 @@ function init() {
 function initGlobe() {
 
   let gData = [];
+  let rgData = [];
 
   var labelData = [];
   // Object.entries(COUNTRIES).forEach(([key, val]) => {
@@ -138,82 +139,117 @@ function initGlobe() {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  const ANIMATION_TIME = 2000 * 0.5;
-  const ANIMATION_DELAY_TIME = 2000 * .1;
 
-  let i = 0;
+  const BASE_ANIMATION_TIME = 820;
+
+  const ANIMATION_TIME = BASE_ANIMATION_TIME * 2;
+  const ANIMATION_DELAY_TIME = BASE_ANIMATION_TIME * 2.;
+
+  function fmtNumber(n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  let day = 1;
   function getData() {
-    var transactions_by_key = transactions[i];
+    fetch(`/data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
+      fetch(`/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
 
-    gData = [];
-    var total_amount = 0;
-    var total_transactions = 0;
-    var top_risky_cities = [];
-    var max_top_risk = -1;
-    var order_date;
+        day++;
+        if (day > 10) {
+          day = 1;
+        }
 
-    for (var transaction_key in transactions_by_key) {
-      var transaction = transactions_by_key[transaction_key];
+        gData = [];
+        rgData = [];
+        var total_amount = 0;
+        var total_transactions = 0;
+        var max_top_risk = -1;
+        var order_date;
 
-      order_date = transaction.order_date;
+        for (var transaction of transactions) {
+          order_date = transaction.order_date;
 
-      if (transaction.order_total_sum < 0 * 1000) {
-        // console.log(transaction);
-        continue;
-      }
-      else {
-        // console.log(transaction, transaction_key);
-      }
+          total_amount += transaction.order_total;
+          total_transactions += transaction.order_total_count;
 
-      total_amount += transaction.order_total_sum;
-      total_transactions += transaction.order_total_count;
+          if (Math.floor(transaction.risk_score) > max_top_risk) {
+            max_top_risk = Math.floor(transaction.risk_score);
+          }
 
-      if (Math.floor(transaction.risk_score_mean) > max_top_risk) {
-        max_top_risk = Math.floor(transaction.risk_score_mean);
-        top_risky_cities = [transaction.city];
-      }
-      else if (Math.floor(transaction.risk_score_mean) == max_top_risk) {
-        top_risky_cities.push(transaction.city);
-      }
+          var s = transaction.order_total / (160 * 1000 * 10);
+          s = Math.min(s, 0.6);
+          s = Math.max(s, 0.02);
 
-      var s = transaction.order_total_sum / (160 * 1000 * 10);
-      s = Math.min(s, 0.1);
-      s = Math.max(s, 0.02);
+          var r = transaction.order_total_count / (17*1000);
+          r = Math.min(r, 1.1);
+          r = Math.max(r, 0.4);
 
-      var r = transaction.order_total_count / (17*1000);
-      r = Math.min(r, 1.1);
-      r = Math.max(r, 0.4);
+          gData.push({
+            lat: transaction.lat,
+            lng: transaction.lon,
+            size: s,
+            color: COLORS[Math.floor(transaction.risk_score)],
+            radius: r,
+          });
+        }
 
-      gData.push({
-        lat: transaction.lat,
-        lng: transaction.lon,
-        size: s,
-        color: COLORS[Math.floor(transaction.risk_score_mean)],
-        radius: r,
-        tooltip: `<pre>${transaction.city}:\n Total amount: $${transaction.order_total_sum}\n # of Transactions: ${transaction.order_total_count}</pre>`
+        for (var transaction of rem_transactions) {
+          total_amount += transaction.total_amount;
+          total_transactions += transaction.total_count;
+
+          var s = transaction.total_amount / (160 * 1000 * 10);
+          s = Math.min(s, 0.1);
+          s = Math.max(s, 0.02);
+
+          var r = transaction.total_count / (17 * 1000);
+          r = Math.min(r, 1.1);
+          r = Math.max(r, 0.4);
+
+          var extraGapBase = 0.5;
+          var initGapExtra = Math.random() * extraGapBase;
+
+          var color_chances = [0.85, 0.95, 0.98, 1];
+          var color = COLORS[0];
+          var color_chance = Math.random();
+          for (var j = 0; j < color_chances.length; j++) {
+            if (color_chance < color_chances[j]) {
+              color = COLORS[j];
+              break;
+            }
+          }
+
+          rgData.push({
+            from_lat: transaction.from_lat,
+            from_lon: transaction.from_lon,
+            to_lat: transaction.to_lat,
+            to_lon: transaction.to_lon,
+            size: 0.75,
+            color: color,
+            radius: r,
+            DashLength: extraGapBase,
+            DashGap: 10,
+            DashInitialGap: 1 + initGapExtra,
+          });
+        }
+
+        console.log('gData', gData.length);
+        console.log('rgData', rgData.length);
+
+        GlobeGL.pointsData(gData);
+        GlobeGL.arcsData(rgData);
+
+        // find #info div and update the content
+        var info = document.getElementById('info');
+        var info_innerHTML = `<pre>`;
+        info_innerHTML += `${order_date}\n`;
+        info_innerHTML += `Total Amount: $${fmtNumber(Math.floor(total_amount))}\n`;
+        info_innerHTML += `# of Transactions: ${total_transactions}\n`;
+        info_innerHTML += `Average amount: $${fmtNumber(Math.floor(total_amount / total_transactions))}\n`;
+        info.innerHTML = info_innerHTML;
+
+        setTimeout(getData, ANIMATION_TIME + ANIMATION_DELAY_TIME);
       });
-    }
-
-    GlobeGL.pointsData(gData);
-
-    // sort top_risky_cities by city name
-    top_risky_cities.sort();
-
-    // find #info div and update the content
-    var info = document.getElementById('info');
-    var info_innerHTML = `<pre>`;
-    info_innerHTML += `${order_date}\n`;
-    info_innerHTML += `Total Amount: $${fmtNumber(Math.floor(total_amount))}\n`;
-    info_innerHTML += `# of Transactions: ${total_transactions}\n`;
-    info_innerHTML += `Average amount: $${fmtNumber(Math.floor(total_amount / total_transactions))}\n`;
-    info.innerHTML = info_innerHTML;
-
-    i++;
-    if (i >= Object.keys(transactions).length) {
-      i = 0;
-    }
-
-    setTimeout(getData, ANIMATION_TIME + ANIMATION_DELAY_TIME);
+    });
   }
 
   // NOTE animations are followed after the globe enters the scene
@@ -227,11 +263,21 @@ function initGlobe() {
       .labelResolution(6)
       .labelAltitude(0.01)
       // .pointsData(gData)
-      .pointsTransitionDuration(ANIMATION_TIME)
-      .pointLabel("tooltip")
+      .pointsTransitionDuration(ANIMATION_TIME + ANIMATION_DELAY_TIME)
       .pointRadius('radius')
       .pointAltitude('size')
-      .pointColor('color');
+      .pointColor('color')
+      .arcsTransitionDuration(0)
+      .arcStroke('size')
+      .arcDashLength('DashLength')
+      .arcDashGap('DashGap')
+      .arcDashInitialGap('DashInitialGap')
+      .arcDashAnimateTime(ANIMATION_TIME)
+      .arcColor('color')
+      .arcStartLat("from_lat")
+      .arcStartLng("from_lon")
+      .arcEndLat("to_lat")
+      .arcEndLng("to_lon");
 
     setTimeout(getData, ANIMATION_TIME);
   }, 500);

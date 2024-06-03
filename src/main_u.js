@@ -7,8 +7,8 @@ import {
   PointLight,
 } from "three";
 import countries from "./files/globe-data-min.json";
-import transactions from "./files/transactions_uniteller.json";
-// let transactions = [];
+// import transactions from "./files/transactions_uniteller.json";
+let transactions = [];
 let renderer, camera, scene, controls;
 let mouseX = 0;
 let mouseY = 0;

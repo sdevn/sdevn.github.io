@@ -1,4 +1,4 @@
-// Version 2.32.4 globe.gl - https://github.com/vasturiano/globe.gl
+// Version 2.32.4 globe.gl - undefined
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
