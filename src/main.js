@@ -151,8 +151,8 @@ function initGlobe() {
 
   let day = 1;
   function getData() {
-    fetch(`/data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
-      fetch(`/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
+    fetch(`/dist/data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
+      fetch(`/dist/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
 
         day++;
         if (day > 10) {
