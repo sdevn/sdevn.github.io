@@ -1,7 +1,8 @@
 import { Object3D, Light, Scene, Camera, WebGLRenderer, WebGLRendererParameters } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { ThreeGlobeGeneric, ConfigOptions as ThreeGlobeConfigOptions } from 'three-globe';
+// import { ThreeGlobeGeneric, ConfigOptions as ThreeGlobeConfigOptions } from 'three-globe';
+import { ThreeGlobeGeneric, ConfigOptions as ThreeGlobeConfigOptions } from '../../three-globe/dist/three-globe';
 
 export interface ConfigOptions extends ThreeGlobeConfigOptions {
   rendererConfig?: WebGLRendererParameters

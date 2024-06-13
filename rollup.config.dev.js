@@ -28,7 +28,7 @@ export default [
     plugins: [
       json(),
       resolve(),
-      commonJs(),
+      commonJs({ sourceMap: false }),
       postCss(),
       babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' })
     ]
@@ -45,28 +45,10 @@ export default [
     plugins: [
       json(),
       resolve(),
-      commonJs(),
+      commonJs({ sourceMap: false }),
       postCss(),
       terser(),
       babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' })
     ]
   },
-  {
-    input: 'src/main_u.js',
-    output: [
-      {
-        ...umdConf,
-        file: `dist/main_u.js`,
-        sourcemap: true
-      }
-    ],
-    plugins: [
-      json(),
-      resolve(),
-      commonJs(),
-      postCss(),
-      terser(),
-      babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' })
-    ]
-  }
 ];

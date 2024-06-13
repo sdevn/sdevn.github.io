@@ -9,7 +9,7 @@ const THREE = {
   CSS2DRenderer
 };
 
-import ThreeGlobe from 'three-globe';
+import ThreeGlobe from '../../three-globe/dist/three-globe';
 import ThreeRenderObjects from 'three-render-objects';
 
 import accessorFn from 'accessor-fn';
@@ -36,6 +36,11 @@ const linkedGlobeProps = Object.assign(...[
   'pointLng',
   'pointColor',
   'pointAltitude',
+
+  'pointId',
+  'pointInitDelay',
+  'pointEndAltitude',
+
   'pointRadius',
   'pointResolution',
   'pointsMerge',

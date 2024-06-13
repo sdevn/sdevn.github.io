@@ -1105,6 +1105,11 @@
   "resolved" "https://registry.npmjs.org/@tweenjs/tween.js/-/tween.js-23.1.1.tgz"
   "version" "23.1.1"
 
+"@types/dat.gui@^0.7.13":
+  "integrity" "sha512-LmG4Pr0mbsB/1WVttf8xaHx45BvSBDGY5D9+0/9AZCbI4vvOguwBHZdKyJMxt5Yst8+icRSHKmr7ClV2u5ZtDA=="
+  "resolved" "https://registry.npmjs.org/@types/dat.gui/-/dat.gui-0.7.13.tgz"
+  "version" "0.7.13"
+
 "@types/estree@*", "@types/estree@^1.0.0", "@types/estree@1.0.5":
   "integrity" "sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw=="
   "resolved" "https://registry.npmjs.org/@types/estree/-/estree-1.0.5.tgz"
@@ -1441,9 +1446,9 @@
   "version" "3.1.0"
 
 "d3-geo-voronoi@^2.0":
-  "integrity" "sha512-KeBrhSLyN6fdcjGxpmil9I7JNsRQIbp58PybKFnebG1qpbwon5ia43epUpYgjgZZxfrhjb+3up0f6IwkQuPkwg=="
-  "resolved" "https://registry.npmjs.org/d3-geo-voronoi/-/d3-geo-voronoi-2.0.1.tgz"
-  "version" "2.0.1"
+  "integrity" "sha512-kqE4yYuOjPbKdBXG0xztCacPwkVSK2REF1opSNrnqqtXJmNcM++UbwQ8SxvwP6IQTj9RvIjjK4qeiVsEfj0Z2Q=="
+  "resolved" "https://registry.npmjs.org/d3-geo-voronoi/-/d3-geo-voronoi-2.1.0.tgz"
+  "version" "2.1.0"
   dependencies:
     "d3-array" "3"
     "d3-delaunay" "6"
@@ -1504,6 +1509,11 @@
   dependencies:
     "d3-delaunay" "6"
     "d3-scale" "4"
+
+"dat.gui@^0.7.9":
+  "integrity" "sha512-sCNc1OHobc+Erc1HqiswYgHdVNpSJUlk/Hz8vzOCsER7rl+oF/4+v8GXFUyCgtXpoCX6+bnmg07DedLvBLwYKQ=="
+  "resolved" "https://registry.npmjs.org/dat.gui/-/dat.gui-0.7.9.tgz"
+  "version" "0.7.9"
 
 "data-joint@1":
   "integrity" "sha512-tMK0m4OVGqiA3zkn8JmO6YAqD8UwJqIAx4AAwFl1SKTtKAqcXePuT+n2aayiX9uITtlN3DFtKKTOxJRUc2+HvQ=="
@@ -2672,7 +2682,7 @@
     "kapsule" "1"
     "polished" "4"
 
-"three@*", "three@>=0.118 <1", "three@>=0.125", "three@>=0.72.0", "three@>=0.84.0":
+"three@*", "three@^0.163.0", "three@>=0.125", "three@>=0.72.0", "three@>=0.84.0":
   "integrity" "sha512-HlMgCb2TF/dTLRtknBnjUTsR8FsDqBY43itYop2+Zg822I+Kd0Ua2vs8CvfBVefXkBdNDrLMoRTGCIIpfCuDew=="
   "resolved" "https://registry.npmjs.org/three/-/three-0.163.0.tgz"
   "version" "0.163.0"
