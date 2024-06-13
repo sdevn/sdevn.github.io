@@ -150,7 +150,7 @@ function initGlobe() {
 
   let day = 2;
   function getData() {
-    fetch(`./files/data/__2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
+    fetch(`files/data/__2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
       day++;
       if (day > 9) {
         day = 2;
@@ -229,7 +229,7 @@ function initGlobe() {
   }
   
   function getRemittanceData() {    
-    fetch(`./files/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
+    fetch(`files/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
       if (day > 10) {
         day = 2;
       }
