@@ -1100,10 +1100,10 @@
   dependencies:
     "@turf/helpers" "^6.5.0"
 
-"@tweenjs/tween.js@18 - 23":
-  "integrity" "sha512-ZpboH7pCPPeyBWKf8c7TJswtCEQObFo3bOBYalm99NzZarATALYCo5OhbCa/n4RQyJyHfhkdx+hNrdL5ByFYDw=="
-  "resolved" "https://registry.npmjs.org/@tweenjs/tween.js/-/tween.js-23.1.1.tgz"
-  "version" "23.1.1"
+"@tweenjs/tween.js@^23.1.2", "@tweenjs/tween.js@18 - 23":
+  "integrity" "sha512-kMCNaZCJugWI86xiEHaY338CU5JpD0B97p1j1IKNn/Zto8PgACjQx0UxbHjmOcLl/dDOBnItwD07KmCs75pxtQ=="
+  "resolved" "https://registry.npmjs.org/@tweenjs/tween.js/-/tween.js-23.1.2.tgz"
+  "version" "23.1.2"
 
 "@types/dat.gui@^0.7.13":
   "integrity" "sha512-LmG4Pr0mbsB/1WVttf8xaHx45BvSBDGY5D9+0/9AZCbI4vvOguwBHZdKyJMxt5Yst8+icRSHKmr7ClV2u5ZtDA=="

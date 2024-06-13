@@ -13,6 +13,7 @@ import {
   // PointLightHelper,
 } from "three";
 import { GUI } from "dat.gui";
+import * as TWEEN from '@tweenjs/tween.js';
 
 import countries from "./files/globe-data-min.json";
 let renderer, camera, scene, controls;
@@ -113,7 +114,7 @@ function init() {
   window.addEventListener("resize", onWindowResize, false);
   document.addEventListener("mousemove", onMouseMove);
 
-  gui = new GUI({ width: 285 });
+  // gui = new GUI({ width: 285 });
 }
 
 // SECTION Globe
@@ -148,9 +149,37 @@ function initGlobe() {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  function updateInfo(info_data, skip_normalization = false) {
+    var info = document.getElementById('info');
+    var info_innerHTML = `<pre>`;
+
+    let total_amount = info_data.total_amount;
+    let total_transactions = info_data.total_transactions;
+    let avg_amount = Math.floor(total_amount / total_transactions) ;
+
+    if (skip_normalization === true) {
+      total_amount = Math.floor(total_amount);
+      avg_amount = Math.floor(avg_amount);
+    }
+    else {
+      avg_amount = Math.floor(total_amount / (total_transactions * 10)) * 10;
+      total_amount = Math.floor(total_amount / 100000) * 100000;
+      total_transactions = Math.floor(total_transactions / 10000) * 10000;
+    }
+
+    total_amount = fmtNumber(total_amount);
+    avg_amount = fmtNumber(avg_amount);
+
+    info_innerHTML += `${info_data.order_date}\n`;
+    info_innerHTML += `Total Amount: $${total_amount}\n`;
+    info_innerHTML += `# of Transactions: ${total_transactions}\n`;
+    info_innerHTML += `Average amount: $${avg_amount}\n`;
+    info.innerHTML = info_innerHTML;
+  }
+
   let day = 2;
   function getData() {
-    fetch(`files/data/__2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
+    fetch(`/dist/data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(transactions => {
       day++;
       if (day > 9) {
         day = 2;
@@ -212,24 +241,38 @@ function initGlobe() {
         });
       }
 
-      console.log(order_date);
       GlobeGL.pointsData(gData);
 
       // find #info div and update the content
-      var info = document.getElementById('info');
-      var info_innerHTML = `<pre>`;
-      info_innerHTML += `${order_date}\n`;
-      info_innerHTML += `Total Amount: $${fmtNumber(Math.floor(total_amount))}\n`;
-      info_innerHTML += `# of Transactions: ${total_transactions}\n`;
-      info_innerHTML += `Average amount: $${fmtNumber(Math.floor(total_amount / total_transactions))}\n`;
-      info.innerHTML = info_innerHTML;
+      // var info = document.getElementById('info');
+      // var info_innerHTML = `<pre>`;
+      // info_innerHTML += `${order_date}\n`;
+      // info_innerHTML += `Total Amount: $${fmtNumber(Math.floor(total_amount))}\n`;
+      // info_innerHTML += `# of Transactions: ${total_transactions}\n`;
+      // info_innerHTML += `Average amount: $${fmtNumber(Math.floor(total_amount / total_transactions))}\n`;
+      // info.innerHTML = info_innerHTML;
+
+      var info_data = {
+        total_amount: total_amount,
+        total_transactions: total_transactions,
+        max_top_risk: max_top_risk
+      };
+
+      new TWEEN.Tween({ order_date: order_date, total_amount: 0, total_transactions: 0, max_top_risk: 0 })
+        .to(info_data, ANIM_TIME)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(updateInfo)
+        .onComplete(() => {
+          updateInfo(Object.assign({}, info_data, { order_date: order_date }), true);
+        })
+        .start();
 
       setTimeout(getData, ANIM_TIME + ARC_ANIM_DELAY_TIME);
     });
   }
   
   function getRemittanceData() {    
-    fetch(`files/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
+    fetch(`/dist/remittance_data/2023-01-${day.toString().padStart(2, '0') }.json`).then(response => response.json()).then(rem_transactions => {
       if (day > 10) {
         day = 2;
       }
