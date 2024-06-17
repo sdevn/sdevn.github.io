@@ -163,12 +163,13 @@ function initGlobe() {
     }
     else {
       avg_amount = Math.floor(total_amount / (total_transactions * 10)) * 10;
-      total_amount = Math.floor(total_amount / 100000) * 100000;
-      total_transactions = Math.floor(total_transactions / 10000) * 10000;
+      total_amount = Math.floor(total_amount / 250000) * 250000;
+      total_transactions = Math.floor(total_transactions / 20000) * 20000;
     }
 
     total_amount = fmtNumber(total_amount);
     avg_amount = fmtNumber(avg_amount);
+    total_transactions = fmtNumber(total_transactions);
 
     info_innerHTML += `${info_data.order_date}\n`;
     info_innerHTML += `Total Amount: $${total_amount}\n`;
